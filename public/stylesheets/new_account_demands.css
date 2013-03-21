@@ -1,0 +1,108 @@
+
+body {
+  margin: 0;
+  padding: 0.5em 1em 1em 1em;
+  font-size: 12pt;
+  background: white;
+}
+
+h1 {
+  margin: 0.5em 0 0.5em 0;
+}
+
+.errorExplanation {
+  border: 3px solid red;
+  background: #ffeeee;
+  padding: 1em;
+}
+
+.field_with_errors {
+  background: #ffeeee;
+  border: 3px solid red;
+  padding: 2px;
+  display: table-cell;
+}
+
+.flash_notice {
+  background: #eeffee;
+  border: 3px solid #00ff00;
+  padding: 2px 1em;
+  display: table-cell;
+}
+
+.flash_error {
+  background: #ffeeee;
+  border: 3px solid red;
+  padding: 2px 1em;
+  display: table-cell;
+}
+
+.form_container {
+  display: table-cell;
+  margin: 1em;
+  padding: 1em;
+  background: #eeeeee;
+  border: 3px solid black;
+}
+
+.form_table {
+}
+
+.form_table td {
+}
+
+.form_table th {
+  text-align: right;
+}
+
+.field_note {
+  font-size: 9pt;
+  color: #555555;
+}
+
+.section_separator {
+  background-color: #55cccc;
+}
+
+.comment {
+   border: 1px solid black;
+   margin: 2px;
+   padding: 2px;
+   background: white;
+}
+
+.index_table {
+  border: 2px solid black;
+}
+
+.index_table th {
+  background: #eeeeee;
+  border: 1px solid black;
+  padding: 1px 1em;
+  white-space: nowrap;
+}
+
+.index_table td {
+  padding: 1px 1em;
+  white-space: nowrap;
+}
+
+.footer {
+  margin-top: 1em;
+  padding-top: 2px;
+  border-top: 1px solid #888888;
+  color: #888888;
+  font-size: 80%;
+  text-align: center;
+}
+
+.footer a:link {
+  text-decoration: none;
+  color: #888888;
+}
+
+.footer a:visited {
+  text-decoration: none;
+  color: #888888;
+}
+

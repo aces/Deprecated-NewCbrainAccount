@@ -1,0 +1,35 @@
+
+<h1>Authenticate as an administrator.</h1>
+
+(If you dare.)<p>
+
+<div class="form_container">
+
+<%= form_tag :action => 'auth', :method => :post do %>
+
+  <table>
+
+    <tr>
+      <th>Username:</th>
+      <td><%= text_field_tag :adm_user, session[:admin], :size => 10 %></td>
+    </tr>
+
+    <tr>
+      <th>Password:</th>
+      <td><%= password_field_tag :adm_pw, "", :size => 10 %></td>
+    </tr>
+
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <th colspan="2"><%= submit_tag "Authenticate" %></th>
+    </tr>
+
+  </table>
+
+<% end %>
+
+</div>
+

@@ -1,0 +1,189 @@
+
+<% if @exception_trace.present? %>
+  <div class="flash_error"><pre><%= @exception_trace %></pre></div>
+<% end %>
+
+<h1>Account Request Summary:</h1>
+
+
+<h3>Editing this form:</h3>
+
+<% if session[:admin] %>
+
+  As an administrator, you can <%= link_to "edit", :action => :edit %> this form.
+
+  <% if ! @demand.approved_by.present? %>
+
+    <h3>Approving this request:</h3>
+
+    You can also <%= link_to "approve", approve_demand_path(@demand), :method => :post, :confirm => "Approve the application of \"#{@demand.full}\" for service \"#{@demand.service}\" ?" %> this request.
+
+    <% if ! @demand.confirmed? %>
+      <span style="color: red">However, note that the user has not yet confirmed the email address.</span>
+    <% else %>
+      The user has confirmed the email address.
+    <% end %>
+
+  <% end %>
+
+<% else %>
+
+  This is a summary of the information you provided.
+  <p>
+  You can <%= link_to "edit", :action => :edit %> this form, but
+  this option will only be available while you are using the
+  same browser session you used for submitting this form
+  originally. Do it now while you can!
+
+<% end %>
+
+
+
+<h3>Email Confirmation:</h3>
+
+A confirmation email has been sent to the address you provided. Once you receive
+it, please click on the provided link so we can confirm your identity.
+
+<P>
+
+If you've not receive the email, you can ask for another <%= link_to "email confirmation request", resend_confirm_demand_path(@demand), :method => :post %> and another one will be sent.
+
+
+
+<h3>Cancelling This Request:</h3>
+
+You can <%= link_to "delete", demand_path(@demand), :action => :destroy, :method => :delete, :confirm => "Are you sure you want to delete the request of \"#{@demand.full}\" ?" %> this request. No traces or backups will be kept on our servers, except for some logfile entries which will eventually be rolled over.
+
+<p>
+
+
+
+<div class="form_container">
+
+  <table class="form_table">
+
+  <tr>
+    <th>Full Name:</th>
+    <td><%= @demand.full %></td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+
+  <tr>
+    <th>Name of Institution/Organization:</th>
+    <td><%= @demand.institution %></td>
+  </tr>
+
+  <tr>
+    <th>Department:</th>
+    <td><%= @demand.department %></td>
+  </tr>
+
+  <tr>
+    <th>Position or role:</th>
+    <td><%= @demand.position %></td>
+  </tr>
+
+  <tr>
+    <th>Email address:</th>
+    <td><%= @demand.email %></td>
+  </tr>
+
+  <tr>
+    <th>Street Address (line 1):</th>
+    <td><%= @demand.street1 %></td>
+  </tr>
+
+  <tr>
+    <th>Street Address (line 2):</th>
+    <td><%= @demand.street2 %></td>
+  </tr>
+
+  <tr>
+    <th>City:</th>
+    <td><%= @demand.city %></td>
+  </tr>
+
+  <tr>
+    <th>Province/State:</th>
+    <td><%= @demand.province %></td>
+  </tr>
+
+  <tr>
+    <th>Country:</th>
+    <td><%= @demand.country %></td>
+  </tr>
+
+  <tr>
+    <th>Postal Code:</th>
+    <td><%= @demand.postal_code %></td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+
+  <tr>
+    <th>Time Zone:</th>
+    <td>
+      <%= @demand.time_zone.presence || "(None selected)" %>
+    </td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+
+  <tr>
+    <th>Service requested:</th>
+    <td><%= NewAccountOfferings::ServiceList[@demand.service] %></td>
+  </tr>
+
+  <% if @demand.comment.present? %>
+
+  <tr>
+    <th>Comments or special demand:</th>
+    <td><pre class="comment"><%= @demand.comment %><pre></td>
+  </tr>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+
+  <% end %>
+
+
+  <tr>
+    <th>Status of request:</th>
+    <td>
+        <% if @demand.confirmed? %>
+          Email address confirmed by user.<br>
+          <% if @demand.approved_by.present? %>
+            Request approved by administrator.
+          <% else %>
+            <span style="color: red">Request not yet approved by administrator.</span>
+          <% end %>
+        <% else %>
+          <span style="color: red">Email address not yet confirmed.</span>
+        <% end %>
+    </td>
+  </tr>
+
+  </table>
+
+</div>
+
+
+
+<% if session[:admin].presence %>
+  <p>
+  You can go <%= link_to "back to Index", :action => :index %> too.
+<% end %>
+
+

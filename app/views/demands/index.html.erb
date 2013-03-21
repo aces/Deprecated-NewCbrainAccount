@@ -1,0 +1,74 @@
+
+<h1>List of new account requests:</h1>
+
+<% numpages = (((@tot > 0 ? @tot : 1)-1)/@page_size)+1 %>
+<% start_i    = (@page-1)*@page_size + 1 %>
+<% end_i      = start_i + @demands.size - 1 %>
+
+<table class="index_table">
+
+<tr>
+  <th colspan="9">
+    <% if @demands.count > 0 %>
+      Showing records <%= start_i %> to <%= end_i %> of <%= @tot %>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      <% if numpages > 1 %>
+        Pages: <% 1.upto(numpages) do |p| %>
+          <% if @page == p %>
+            <strong><%= p %></strong>
+          <% else %>
+            <%= link_to "#{p}", :page => "#{p}" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% else %>
+      (No records to show)
+    <% end %>
+  </th>
+</tr>
+
+<tr>
+  <th>Full Name</th>
+  <th>Email</th>
+  <th>Institution</th>
+  <th>Country</th>
+  <th>Service Requested</th>
+  <th>Comments?</th>
+  <th>Show</th>
+  <th>Confirmed?</th>
+  <th>Approved?</th>
+</tr>
+
+<% @demands.each do |req| %>
+
+<tr>
+  <td><%= crop_text(req.full) %></td>
+  <td><%= crop_text(req.email) %></td>
+  <td><%= crop_text(req.institution) %></td>
+  <td><%= crop_text(req.country) %></td>
+  <td><%= req.service %></td>
+  <td><%= req.comment.blank? ? "-" : '<span style="color: green">Yes!</span>'.html_safe %></td>
+  <td><%= link_to "Show", :action => :show, :id => req.id %></td>
+  <td><%= req.confirmed? ? "Yes" : '<span style="color: red">NO!</span>'.html_safe %></td>
+  <td>
+     <% if req.approved_by.presence && req.approved_at.presence %>
+       By: <%= req.approved_by %> at <%= req.approved_at %>
+     <% elsif req.confirmed? %>
+       <%= link_to "(Approve this)", approve_demand_path(req), :method => :post,
+           :confirm => "Approve the application of \"#{req.full}\" for service \"#{req.service}\" ?" %>
+     <% else %>
+       (Waiting for confirmation)
+     <% end %>
+  </td>
+</tr>
+
+<% end %>
+
+</table>
+
+<p>
+
+<%= link_to "Create a new Account Request", :action => :new %>
+&nbsp; &nbsp; &nbsp;
+<%= link_to "De-authenticate", :controller => :auth, :action => :deauth %>
+
