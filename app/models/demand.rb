@@ -1,7 +1,4 @@
 
-#class User < ActiveRecord::Base
-#end
-
 class Demand < ActiveRecord::Base
 
 #    t.string   "title"
@@ -88,34 +85,38 @@ class Demand < ActiveRecord::Base
     mylogin = self.login.presence || (self.first[0,1] + self.last).downcase
     self.login = mylogin
     unless self.valid?
-       Raise "Current record is invalid. Check form values."
+       Raise "Current record is invalid. Probably: login name incorrect. Check form values."
     end
 
-    # TODO
+    guest_psc  = LorisPsc.find_by_Alias('GST')
+    loris_user = LorisUser.new
 
-#    found = User.find_by_login(login)
-#
-#    if found
-#      ex = RuntimeError.new("User '#{login}' already exists.")
-#      ex.set_backtrace([])
-#      raise ex
-#    end
-#
-#    user = User.create(
-#      :login              => login,
-#      :full_name          => self.full,
-#      :email              => self.email,
-#      :role               => 'user',
-#      :password_reset     => false,
-#      :time_zone          => self.time_zone.presence,
-#      :city               => self.city,
-#      :country            => self.country,
-#      :account_locked     => true,
-#      :crypted_password   => pw
-#   )
-# 
-#   "Created User # #{user.id}."
-    "TODO HERE: Create user '#{self.full}' for service '#{self.service}'."
+    att_map = { # values will be escaped later on
+      'UserID'       => :login,
+      'Real_name'    => self.full_name,
+      'First_name'   => :first,
+      'Last_name'    => :last,
+      'Position'     => :position,
+      'Institution'  => :institution,
+      'Department'   => :department,
+      'Address'      => "#{self.street1} #{self.street2}",
+      'City'         => :city,
+      'State'        => :province,
+      'Zip_code'     => :postal_code,
+      'Country'      => :country,
+      'Email'        => :email,
+      'Password_md5' => salted_md5,
+      'CenterID'     => guest_psc.id
+    }
+
+    att_map.each do |col,val|
+      val = self.read_attribute(val) if val.is_a?(Symbol) # symbols are fetched as attributes of demand object
+      accessor = col.to_sym
+      loris_user.write_attribute(accessor, val)
+    end
+
+    loris_user.save!
+
   end
 
 end
