@@ -55,7 +55,7 @@ class DemandsController < ApplicationController
     @demand.update_attributes(params[:demand])
 
     if ! @demand.save
-      render :action => :edit
+      render :action => :new
       return
     end
 
@@ -114,7 +114,7 @@ class DemandsController < ApplicationController
 
     if @demand.login.blank?
       flash[:error] = "Before approval, a 'login' name must be set."
-      redirect_to :action => :edit, :id => @demand.id
+      redirect_to :action => :update, :id => @demand.id
       return
     end
 
