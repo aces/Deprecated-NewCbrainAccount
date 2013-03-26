@@ -11,7 +11,7 @@ class ConfirmMailer < ActionMailer::Base
     return if demand.confirm_token.blank? || demand.email.blank? || confirm_url.blank?
     mail(
       :to      => @demand.email,
-      :subject => 'Confirmation of New Account'
+      :subject => "Confirmation of New Account Request: #{@demand.service}"
     )
   end
 
@@ -26,6 +26,14 @@ class ConfirmMailer < ActionMailer::Base
     mail(
       :to      => admin_email,
       :subject => subject
+    )
+  end
+
+  def account_created(demand)
+    @demand      = demand
+    mail(
+      :to      => @demand.email,
+      :subject => "New Account Created: #{@demand.service}"
     )
   end
 
