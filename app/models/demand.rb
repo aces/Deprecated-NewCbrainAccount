@@ -70,6 +70,8 @@ class Demand < ActiveRecord::Base
     "#{title} #{first} #{middle} #{last}".strip.gsub(/  +/, " ")
   end
 
+  alias full_name full
+
   def after_approval
     puts "Approving: #{self.full}"
     chars = (('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a).shuffle.reject { |c| c =~ /[01OolI]/ }
