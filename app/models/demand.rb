@@ -20,6 +20,7 @@ class Demand < ActiveRecord::Base
 #    t.string   "postal_code"
 #    t.string   "time_zone"
 #    t.string   "service"
+#    t.string   "login"
 #    t.string   "comment"
 #
 #    t.string   "session_id"
@@ -36,12 +37,14 @@ class Demand < ActiveRecord::Base
   attr_accessible       :title, :first, :middle, :last,
                         :institution, :department, :position, :email,
                         :street1, :street2, :city, :province, :country, :postal_code,
-                        :service, :time_zone, :comment
+                        :service, :login, :time_zone, :comment
 
   validates_presence_of :first, :last,
                         :institution, :department, :position, :email,
                         :province, :country,
                         :service, :confirm_token
+
+  validates             :login, :length => { :minimum => 3, :maximum => 8 }, :allow_blank => true
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
 
@@ -52,7 +55,7 @@ class Demand < ActiveRecord::Base
       :title, :first, :middle, :last,
       :institution, :department, :position, :email,
       :street1, :street2, :city, :province, :country, :postal_code,
-      :comment
+      :service, :login, :comment
     ].each do |att|
       val = read_attribute(att) || ""
       write_attribute(att, val.strip)

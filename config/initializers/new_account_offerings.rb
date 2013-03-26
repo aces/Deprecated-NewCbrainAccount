@@ -24,10 +24,11 @@ class NewAccountOfferings
      'Root Access'            => 'Root access: Hey I want to delete all your files!'
    }
 
-   # Admin email address for notification of new requests.
+   # Admin email address(es) for notification of new requests.
    # This should be the email address of a real person,
    # who will receive a message each time someone makes
-   # a request for a service.
+   # a request for a service. You can put more than one
+   # address in the string, each separated by commas.
    AdminNotificationEmail = 'real_admin_user@example.com.REPLACE_THIS'
 
    # The encrypted password to enter admin mode.
