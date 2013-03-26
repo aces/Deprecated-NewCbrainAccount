@@ -112,6 +112,12 @@ class DemandsController < ApplicationController
       return
     end
 
+    if @demand.login.blank?
+      flash[:error] = "Before approval, a 'login' name must be set."
+      redirect_to :action => :edit, :id => @demand.id
+      return
+    end
+
     @demand.approved_by ||= session[:admin]
     @demand.approved_at ||= Time.now
     @demand.save

@@ -144,6 +144,11 @@ You can <%= link_to "delete", demand_path(@demand), :action => :destroy, :method
     <td><%= NewAccountOfferings::ServiceList[@demand.service] %></td>
   </tr>
 
+  <tr>
+    <th>Prefered 'login' name:</th>
+    <td><%= @demand.login.presence || "(none)" %></td>
+  </tr>
+
   <% if @demand.comment.present? %>
 
   <tr>
