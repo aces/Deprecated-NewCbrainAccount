@@ -34,7 +34,7 @@
   <th>Country</th>
   <th>Service Requested</th>
   <th>Comments?</th>
-  <th>Show</th>
+  <th>Show/Edit</th>
   <th>Confirmed?</th>
   <th>Approved?</th>
 </tr>
@@ -48,7 +48,11 @@
   <td><%= crop_text(req.country) %></td>
   <td><%= req.service %></td>
   <td><%= req.comment.blank? ? "-" : '<span style="color: green">Yes!</span>'.html_safe %></td>
-  <td><%= link_to "Show", :action => :show, :id => req.id %></td>
+  <td>
+      <%= link_to "Show", :action => :show, :id => req.id %>
+      /
+      <%= link_to "Show", :action => :edit, :id => req.id %>
+  </td>
   <td><%= req.confirmed? ? "Yes" : '<span style="color: red">NO!</span>'.html_safe %></td>
   <td>
      <% if req.approved_by.presence && req.approved_at.presence %>
