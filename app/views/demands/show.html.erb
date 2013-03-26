@@ -39,6 +39,9 @@
 
 
 
+
+<% if ! @demand.confirmed? %>
+
 <h3>Email Confirmation:</h3>
 
 A confirmation email has been sent to the address you provided. Once you receive
@@ -47,6 +50,9 @@ it, please click on the provided link so we can confirm your identity.
 <P>
 
 If you've not receive the email, you can ask for another <%= link_to "email confirmation request", resend_confirm_demand_path(@demand), :method => :post %> and another one will be sent.
+
+<% end %>
+
 
 
 
