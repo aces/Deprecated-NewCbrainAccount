@@ -118,25 +118,28 @@ class DemandsController < ApplicationController
       return
     end
 
-    @demand.approved_by ||= session[:admin]
-    @demand.approved_at ||= Time.now
-    @demand.save
-
-    flash.now[:notice] = "The account request for '#{@demand.full}' has been approved."
-
     @info            = ""
     @exception_trace = ""
 
     if @demand.respond_to?(:after_approval)
       begin
         @info = @demand.after_approval
-        flash.now[:notice] += "\nThe after_approval callback was successfully invoked."
+        flash.now[:notice] = "The after_approval callback was successfully invoked."
       rescue => ex
         flash.now[:error] = "An exception was raised in the after_approval callback.";
         @exception_trace = "#{ex.class}: #{ex.message}\n" +
                            ex.backtrace.join("\n")
       end
     end
+
+    if @exception_trace.blank?
+      @demand.approved_by ||= session[:admin]
+      @demand.approved_at ||= Time.now
+      @demand.save
+      flash.now[:notice] += "\nThe account request for '#{@demand.full}' has been approved."
+      send_account_created_email(@demand) && flash.now[:notice] += "\nThe user was notified of his new account."
+    end
+
   end
 
   def resend_confirm
@@ -168,6 +171,16 @@ class DemandsController < ApplicationController
   rescue => ex
     Rails.logger.error ex.to_s
     flash[:error] = "It seems some error occured. Email notification was probably not sent. Sorry. We'll look into that."
+    return false
+  end
+
+  def send_account_created_email(demand)
+    ConfirmMailer.account_created(demand).deliver
+    return true
+  rescue => ex
+    Rails.logger.error ex.to_s
+    flash.now[:error] ||= ""
+    flash.now[:error]  += "It seems some error occured. The email telling the user the account was created was probably not sent."
     return false
   end
 
