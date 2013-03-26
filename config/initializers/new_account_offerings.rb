@@ -9,26 +9,24 @@ class NewAccountOfferings
    # the new account. It will usually be used in
    # a context where a leading "THE" will be required,
    # so make sure it sounds good that way.
-   TheOrganizationShortName = "The Organization"
+   TheOrganizationShortName = "The BigBrain Data Server"
 
    # Enter the 'FROM' value for the emails that will
    # be sent for confirmation.
-   EmailFrom = 'noreply@example.com'
+   EmailFrom = 'noreply@cbrain.mcgill.ca'
 
    # A list of services that will be shown in the new request form.
    # Provide a one line description, please.
    ServiceList = {
-     'User Account'           => 'A normal user account',
-     'Data Access'            => 'Access to the data in read-only mode',
-     'Mailing List'           => 'I want to be added to the mailing list',
-     'Root Access'            => 'Root access: Hey I want to delete all your files!'
+     'BigBrain Access'        => 'Access to the BigBrain dataset',
+     'Problem Report'         => 'Report a problem with BigBrain data access',
    }
 
    # Admin email address for notification of new requests.
    # This should be the email address of a real person,
    # who will receive a message each time someone makes
    # a request for a service.
-   AdminNotificationEmail = 'real_admin_user@example.com.REPLACE_THIS'
+   AdminNotificationEmail = 'pierre.rioux@mcgill.ca,marc.rousseau@mcgill.ca'
 
    # The encrypted password to enter admin mode.
    # You can generated it by choosing RANDOMLY some

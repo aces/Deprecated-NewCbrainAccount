@@ -1,5 +1,8 @@
 
+<IMG ID="mcgill_logo" SRC="/images/mcgill.png">
+<IMG ID="neuro_logo"  SRC="/images/neurologo.png">
 <h1>Request an account at <%= the_organization %></h1>
+<P>
 
 Please fill this form. Fields with an asterisk (*) are mandatory.<p>
 
@@ -12,10 +15,6 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
   <p>
 
   <table class="form_table">
-
-    <tr>
-      <td colspan="2" class="section_separator">&nbsp;</td>
-    </tr>
 
     <tr>
       <th>Title:</th>
@@ -125,7 +124,7 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
 
     <tr>
       <th>Comments or special requests:</th>
-      <td><%= f.text_area :comment, :rows => 10, :cols => 120 %></td>
+      <td><%= f.text_area :comment %></td>
     </tr>
 
     <tr>

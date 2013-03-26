@@ -72,11 +72,24 @@ class Demand < ActiveRecord::Base
 
   def after_approval
     puts "Approving: #{self.full}"
-#    salt       = rand(10000000).to_s
-#    password   = rand(10000000).to_s + rand(10000000).to_s + rand(10000000).to_s
-#    pw = Digest::SHA1.hexdigest("--#{salt}--#{password}--")
-#
-#    login = (self.first[0,1] + self.last).downcase
+    chars = (('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a).shuffle.reject { |c| c =~ /[01OolI]/ }
+    salt  = chars[0] + chars[1]
+    password = ""
+    10.times { password += chars[rand(chars.size)] }
+
+    # LORIS convention:
+    # UPDATE users SET Password_md5=concat('aa',MD5('aatest'));
+
+    salted_md5 = Digest::MD5.hexdigest( salt + password )
+
+    mylogin = self.login.presence || (self.first[0,1] + self.last).downcase
+    self.login = mylogin
+    unless self.valid?
+       Raise "Current record is invalid. Check form values."
+    end
+
+    # TODO
+
 #    found = User.find_by_login(login)
 #
 #    if found

@@ -10,6 +10,16 @@ h1 {
   margin: 0.5em 0 0.5em 0;
 }
 
+#mcgill_logo {
+   height: 126px;
+   width: auto;
+   padding: 0 0 0 3em;
+}
+
+#neuro_logo {
+   padding: 0 0 13px 5em;
+}
+
 .errorExplanation {
   border: 3px solid red;
   background: #ffeeee;
@@ -69,6 +79,11 @@ h1 {
    margin: 2px;
    padding: 2px;
    background: white;
+}
+
+textarea {
+    width: 35em;
+    height: 5em;
 }
 
 .index_table {
