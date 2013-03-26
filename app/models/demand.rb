@@ -73,6 +73,8 @@ class Demand < ActiveRecord::Base
     "#{title} #{first} #{middle} #{last}".strip.gsub(/  +/, " ")
   end
 
+  alias full_name full
+
   def after_approval
     puts "Approving: #{self.full}"
 #    salt       = rand(10000000).to_s
