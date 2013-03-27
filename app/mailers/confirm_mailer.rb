@@ -21,7 +21,7 @@ class ConfirmMailer < ActionMailer::Base
     @show_url   = show_url
     admin_email = NewAccountOfferings::AdminNotificationEmail
     return if admin_email.blank?
-    subject  = "Request '#{@demand.service}' from '#{@demand.full}'"
+    subject  = "[NewAccount] Request '#{@demand.service}' from '#{@demand.full}'"
     subject += " at '#{@demand.institution}'" if @demand.institution.present?
     mail(
       :to      => admin_email,
