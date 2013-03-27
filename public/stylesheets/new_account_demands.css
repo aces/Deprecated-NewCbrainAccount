@@ -77,6 +77,11 @@ h1 {
    background: white;
 }
 
+textarea {
+    width: 35em;
+    height: 5em;
+}
+
 .index_table {
   border: 2px solid black;
 }

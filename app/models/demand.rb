@@ -1,7 +1,4 @@
 
-#class User < ActiveRecord::Base
-#end
-
 class Demand < ActiveRecord::Base
 
 #    t.string   "title"

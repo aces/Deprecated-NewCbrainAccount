@@ -14,10 +14,6 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
   <table class="form_table">
 
     <tr>
-      <td colspan="2" class="section_separator">&nbsp;</td>
-    </tr>
-
-    <tr>
       <th>Title:</th>
       <td><%= f.text_field :title, :size => 10 %> <span class="field_note">(e.g. 'Mr.', 'Dr.', 'Princess' etc)</span></td>
     </tr>
@@ -130,7 +126,7 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
 
     <tr>
       <th>Comments or special requests:</th>
-      <td><%= f.text_area :comment, :rows => 10, :cols => 120 %></td>
+      <td><%= f.text_area :comment %></td>
     </tr>
 
     <tr>
