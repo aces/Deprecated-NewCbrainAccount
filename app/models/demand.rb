@@ -90,35 +90,42 @@ class Demand < ActiveRecord::Base
        Raise "Current record is invalid. Probably: login name incorrect. Check form values."
     end
 
-    guest_psc  = LorisPsc.find_by_Alias('GST')
+    guest_psc  = LorisPsc.find_by_Alias('GST') # must have been created manually by the admin
     loris_user = LorisUser.new
 
     att_map = { # values will be escaped later on
-      'UserID'       => :login,
-      'Real_name'    => self.full_name,
-      'First_name'   => :first,
-      'Last_name'    => :last,
-      'Position'     => :position,
-      'Institution'  => :institution,
-      'Department'   => :department,
-      'Address'      => "#{self.street1} #{self.street2}",
-      'City'         => :city,
-      'State'        => :province,
-      'Zip_code'     => :postal_code,
-      'Country'      => :country,
-      'Email'        => :email,
-      'Password_md5' => salted_md5,
-      'CenterID'     => guest_psc.id
+      'UserID'          => :login,
+      'Real_name'       => self.full_name,
+      'First_name'      => :first,
+      'Last_name'       => :last,
+      'Position_title'  => :position,
+      'Institution'     => :institution,
+      'Department'      => :department,
+      'Address'         => "#{self.street1} #{self.street2}",
+      'City'            => :city,
+      'State'           => :province,
+      'Zip_code'        => :postal_code,
+      'Country'         => :country,
+      'Email'           => :email,
+      'Password_md5'    => salted_md5,
+      'Password_expiry' => Time.zone.now.strftime("%Y-%m-%d"),
+      'CenterID'        => guest_psc.CenterID
     }
 
     att_map.each do |col,val|
-      val = self.read_attribute(val) if val.is_a?(Symbol) # symbols are fetched as attributes of demand object
+      val = self.send(val) if val.is_a?(Symbol) # symbols are fetched as attributes of demand object
       accessor = col.to_sym
-      loris_user.write_attribute(accessor, val)
+      begin
+        loris_user.send("#{accessor}=", val)
+      rescue
+        Rails.logger.error "Bad att pair: #{accessor} = #{val}"
+        raise
+      end
     end
 
     loris_user.save!
 
+    nil
   end
 
 end
