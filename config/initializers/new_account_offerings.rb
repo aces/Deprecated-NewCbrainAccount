@@ -16,12 +16,14 @@ class NewAccountOfferings
    EmailFrom = 'noreply@example.com'
 
    # A list of services that will be shown in the new request form.
-   # Provide a one line description, please.
+   # Provide a short, one line description, and the main URL for the service.
+   # This list will be shown in a selection box in the
+   # main form.
    ServiceList = {
-     'User Account'           => 'A normal user account',
-     'Data Access'            => 'Access to the data in read-only mode',
-     'Mailing List'           => 'I want to be added to the mailing list',
-     'Root Access'            => 'Root access: Hey I want to delete all your files!'
+     'User Account'           => [ 'A normal user account',                            'http://www.example.com/' ],
+     'Data Access'            => [ 'Access to the data in read-only mode',             'http://www.example.com/' ],
+     'Mailing List'           => [ 'I want to be added to the mailing list',           'http://www.example.com/' ],
+     'Root Access'            => [ 'Root access: Hey I want to delete all your files!' 'http://www.example.com/' ],
    }
 
    # Admin email address(es) for notification of new requests.

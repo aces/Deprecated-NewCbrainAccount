@@ -8,6 +8,11 @@ body {
 
 h1 {
   margin: 0.5em 0 0.5em 0;
+  white-space: nowrap;
+}
+
+.no_wrap {
+  white-space: nowrap;
 }
 
 .errorExplanation {
@@ -53,6 +58,7 @@ h1 {
 
 .form_table th {
   text-align: right;
+  white-space: nowrap;
 }
 
 .field_note {

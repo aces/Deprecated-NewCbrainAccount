@@ -147,7 +147,7 @@ You can <%= link_to "delete", demand_path(@demand), :action => :destroy, :method
 
   <tr>
     <th>Service requested:</th>
-    <td><%= NewAccountOfferings::ServiceList[@demand.service] %></td>
+    <td><%= NewAccountOfferings::ServiceList[@demand.service][0] %></td>
   </tr>
 
   <tr>
