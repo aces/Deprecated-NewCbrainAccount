@@ -31,6 +31,7 @@ class ConfirmMailer < ActionMailer::Base
 
   def account_created(demand)
     @demand      = demand
+    @url         = NewAccountOfferings::ServiceList[@demand.service][1] rescue ""
     mail(
       :to      => @demand.email,
       :subject => "New Account Created: #{@demand.service}"

@@ -16,10 +16,11 @@ class NewAccountOfferings
    EmailFrom = 'noreply@cbrain.mcgill.ca'
 
    # A list of services that will be shown in the new request form.
-   # Provide a one line description, please.
+   # Provide a short, one line description, and the main URL for the service.
+   # This list will be shown in a selection box in the
+   # main form.
    ServiceList = {
-     'BigBrain Access'        => 'Access to the BigBrain dataset',
-     'Problem Report'         => 'Report a problem with BigBrain data access',
+     'BigBrain Access'        => [ 'Access to the BigBrain dataset', "https://bigbrain.loris.ca/" ],
    }
 
    # Admin email address(es) for notification of new requests.

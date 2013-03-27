@@ -111,7 +111,7 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
     <tr>
       <th>* Service you request:</th>
       <td>
-        <%= f.select :service, options_for_select( [ [ "(select one)", "" ] ] + NewAccountOfferings::ServiceList.map { |k,desc| [ desc, k ] }, @demand.service) %>
+        <%= f.select :service, options_for_select( [ [ "(select one)", "" ] ] + NewAccountOfferings::ServiceList.map { |k,pair| [ pair[0], k ] }, @demand.service) %>
       </td>
     </tr>
 

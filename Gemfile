@@ -32,5 +32,5 @@ gem 'rails', '3.0.7'
 
 gem 'thin'
 gem 'dynamic_form'
-#gem 'mysql'
+gem 'mysql'
 gem 'sqlite3'
