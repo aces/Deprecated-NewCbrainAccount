@@ -42,6 +42,7 @@ class Demand < ActiveRecord::Base
                         :service, :confirm_token
 
   validates             :login, :length => { :minimum => 3, :maximum => 8 }, :allow_blank => true
+  validates             :login, :format => { :with => /^[a-zA-Z]\w+$/ }
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
 
