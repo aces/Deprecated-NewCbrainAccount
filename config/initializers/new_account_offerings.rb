@@ -28,8 +28,8 @@ class NewAccountOfferings
    # who will receive a message each time someone makes
    # a request for a service. You can put more than one
    # address in the string, each separated by commas.
-#   AdminNotificationEmail = 'pierre.rioux@mcgill.ca,marc.rousseau@mcgill.ca'
-   AdminNotificationEmail = 'pierre.rioux@mcgill.ca'
+   AdminNotificationEmail = 'pierre.rioux@mcgill.ca,marc.rousseau@mcgill.ca'
+#   AdminNotificationEmail = 'pierre.rioux@mcgill.ca'
 
    # The encrypted password to enter admin mode.
    # You can generated it by choosing RANDOMLY some
