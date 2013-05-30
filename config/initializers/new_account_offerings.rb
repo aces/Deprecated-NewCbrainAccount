@@ -41,7 +41,8 @@ class NewAccountOfferings
    # You'll get a string with the original seed word, a comma, and
    # a 32 characters MD5 hash. The full string needs to be set as the
    # value of the constant below.
-   AdminPassword = 'ox,ea280f79274d11af5d9a723a1348cf41'
+   #AdminPassword = 'ox,ea280f79274d11af5d9a723a1348cf41'
+   AdminPassword = 'z2,b9fac79f2e45d040e0a644ce32b98a53'
 
    # List of usernames you accept as 'admins'
    AdminUsernames = [ 'prioux', 'mero' ]
