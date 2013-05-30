@@ -34,3 +34,5 @@ gem 'thin'
 gem 'dynamic_form'
 gem 'mysql'
 gem 'sqlite3'
+gem 'jquery-rails', '~> 2.1'
+
