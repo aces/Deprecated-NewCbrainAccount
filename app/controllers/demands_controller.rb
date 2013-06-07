@@ -69,7 +69,7 @@ class DemandsController < ApplicationController
     if session[:admin].blank?
       redirect_to :action => :new
     end
-    @page_size = 5
+    @page_size = 25
     @page      = (params[:page].presence || "1").to_i
     @tot       = Demand.count
 
