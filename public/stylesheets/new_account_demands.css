@@ -2,11 +2,16 @@
 body {
   margin: 0;
   padding: 0.5em 1em 1em 1em;
-  font-size: 12pt;
+  font-family: Georgia, serif;
+  font-size: 10pt;
   background: white;
 }
 
 h1 {
+  font-family: Gill Sans, sans-serif !important;
+  font-size: 175%;
+  float: left;
+  color: #348b8d; 
   margin: 0.5em 0 0.5em 0;
   white-space: nowrap;
 }
@@ -16,7 +21,6 @@ h1 {
 }
 
 #mcgill_logo {
-   height: 126px;
    width: auto;
    padding: 0 0 0 3em;
 }
@@ -25,42 +29,50 @@ h1 {
    padding: 0 0 13px 1em;
 }
 
+.warning {
+  color: #bf2d3b;
+}
+
 .errorExplanation {
-  border: 3px solid red;
-  background: #ffeeee;
+  border: 1px solid #bf2d3b;
+  background: #dba1a0;
   padding: 1em;
 }
 
 .field_with_errors {
-  background: #ffeeee;
-  border: 3px solid red;
-  padding: 2px;
+  background: #dba1a0;
+  border: 1px solid #bf2d3b;
+  /*padding: 2px;*/
   display: table-cell;
 }
 
 .flash_notice {
   background: #eeffee;
   border: 3px solid #00ff00;
-  padding: 2px 1em;
+  /*padding: 2px 1em;*/
   display: table-cell;
 }
 
 .flash_error {
   background: #ffeeee;
-  border: 3px solid red;
-  padding: 2px 1em;
+  border: 3px solid #bf2d3b;
+/*  padding: 2px 1em;*/
   display: table-cell;
 }
 
 .form_container {
-  display: table-cell;
-  margin: 1em;
+/*  display: table-cell;
+  /*width: 60%
+  margin: 1em;*/
   padding: 1em;
-  background: #eeeeee;
-  border: 3px solid black;
+  background: #ededed;
+  border: 3px solid #348b8d; /*black;*/
+  border-radius: 4px;
+  -moz-border-radius: 4px; 
 }
 
 .form_table {
+  
 }
 
 .form_table td {
@@ -77,7 +89,7 @@ h1 {
 }
 
 .section_separator {
-  background-color: #55cccc;
+  background-color: #97c4c8; /*55cccc;*/
 }
 
 .comment {
@@ -93,7 +105,7 @@ textarea {
 }
 
 .index_table {
-  border: 2px solid black;
+  border: 2px solid #348b8d; /*black;*/
 }
 
 .index_table th {
@@ -108,6 +120,11 @@ textarea {
   white-space: nowrap;
 }
 
+.note {
+ font-size: 8pt;
+ text-align: center;
+
+}
 .footer {
   margin-top: 1em;
   padding-top: 2px;

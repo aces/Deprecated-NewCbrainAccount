@@ -1,21 +1,28 @@
 
-<h1>Request an account at <%= the_organization %></h1>
+<!--<h1>Account request form for the <%= the_organization %></h1>-->
 
-Please fill this form. Fields with an asterisk (*) are mandatory.<p>
 
-<div class="form_container">
+<div class="form_container" style="width:700px; margin:0 auto;">
 
   <%= form_for @demand, :url => { :action => (@demand.new_record? ? "create" : "update"), :id => @demand.id } do |f| %>
 
   <%= f.error_messages %>
 
-  <p>
 
-  <table class="form_table">
+  <table class="form_table" align="center">
 
     <tr>
+      <th colspan="2" class="h1"><h1>Account request form for the BigBrain Database</h1></th>
+    </tr>
+    <tr>
+	<td class="warning">Fields with an asterisk (*) are mandatory.</td>
+    </tr>
+    <tr>
+    </tr>
+	<td>&nbsp;</td>
+    <tr>
       <th>Title:</th>
-      <td><%= f.text_field :title, :size => 10 %> <span class="field_note">(e.g. 'Mr.', 'Dr.', 'Princess' etc)</span></td>
+      <td><%= f.text_field :title, :size => 10 %> <span class="field_note">(e.g. 'Mr.', 'Dr.', etc.)</span></td>
     </tr>
 
     <tr>
@@ -31,6 +38,11 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
     <tr>
       <th>* Last Name:</th>
       <td><%= f.text_field :last, :size => 20 %></td>
+    </tr>
+
+    <tr>
+      <th>* Preferred 'login' name:</th>
+      <td><%= f.text_field :login, :size => 10 %> <span class="field_note">(min. 3 characters)</span></td>
     </tr>
 
     <tr>
@@ -61,6 +73,10 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
     </tr>
 
     <tr>
+      <td colspan="2" class="section_separator">&nbsp;</td>
+    </tr>
+
+    <tr>
       <th>Street Address (line 1):</th>
       <td><%= f.text_field :street1, :size => 60 %></td>
     </tr>
@@ -86,43 +102,29 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
     </tr>
 
     <tr>
-      <th>Postal Code:</th>
+      <th>Postal/ZIP Code:</th>
       <td><%= f.text_field :postal_code, :size => 8 %></td>
     </tr>
 
-    <tr>
-      <td colspan="2" class="section_separator">&nbsp;</td>
-    </tr>
 
-    <tr>
+  <!--  <tr>
       <th>Time Zone:</th>
       <td>
-        <%= f.time_zone_select :time_zone,
+-->
+    <%if false%>    <%= f.time_zone_select :time_zone,
             ActiveSupport::TimeZone.all.select { |t| t.name =~ /canada/i },
             { :default => ActiveSupport::TimeZone['Eastern Time (US & Canada)'], :include_blank => true }
-        %>
-      </td>
+        %> 
+<%end%>
+<!--
+     </td>
     </tr>
-
     <tr>
       <td colspan="2" class="section_separator">&nbsp;</td>
     </tr>
 
-    <tr>
-      <th>* Service you request:</th>
-      <td>
-        <%= f.select :service, options_for_select( [ [ "(select one)", "" ] ] + NewAccountOfferings::ServiceList.map { |k,pair| [ pair[0], k ] }, @demand.service) %>
-      </td>
-    </tr>
+-->
 
-    <tr>
-      <th>Prefered 'login' name:</th>
-      <td><%= f.text_field :login, :size => 10 %> <span class="field_note">(e.g. 'tjones', 'msmith' etc)</span></td>
-    </tr>
-
-    <tr>
-      <td colspan="8">&nbsp;</td>
-    </tr>
 
     <tr>
       <th>Comments or special requests:</th>
@@ -136,39 +138,43 @@ Please fill this form. Fields with an asterisk (*) are mandatory.<p>
     <tr>
       <td colspan="2">
         <center><%= f.submit(@demand.new_record? ? "Request Account" : "Update Request") %>
-        <span class="field_note">(There's a delay of 3 seconds after submission)</span>
+<!--        <span class="field_note">(There's a delay of 3 seconds after submission)</span>-->
         </center>
       </td>
     </tr>
 
   </table>
 
+  <%= f.hidden_field :service, :value => 'BigBrain Access' %>
+
   <% end %>
 
 </div>
 
-<p>
+</br>
+<p align="center">
 
-<strong>Privacy note:</strong><br>
-<p>
+<b>Privacy note:</b>
+<p class = "note">
 The information you supply in this form is
-only used in order to review your application and then, when approved, to
-automatically fill out the fields of your user account at the service you requested.
-</p>
+only used in order to review your application and, when approved, to
+automatically generate your user account. </br>
 This information will not be used in any other way, or passed on to
-any other entities or person. In the end, only four (4) copies of this
+any other entities or persons. <!--In the end, only four (4) copies of this
 information is stored:
 
-<UL>
+<UL class = "note">
 <LI>The NewAccount application, which shows you this form right now, has your information in a small database.</LI>
-<LI>If your application is approved, some or all the fields are used to create your user account on the service, of course.</LI>
+<LI>If your application is approved, some or all the fields are used to create your user account on the service.</LI>
 <LI>The system logs of the NewAccount application retains that information until log rotations (usually a few weeks).</LI>
 <LI>System backups of the server which runs this application may also preserve the logs and database content for some weeks.</LI>
 </UL>
+-->
+<!--These last two copies are just standard computer system maintenance procedures.-->
+</br>
+You can elect to delete the information in the NewAccount database at any time. <!-- if your let your browser keep the HTTP cookie that identify your session (a 'delete' link is provided in the summary which is shown after your submit).-->
 
-These last two copies are just standard computer system maintenance procedures, as you can see.<p>
-
-You can elect to delete the information in the NewAccount database at any time (even before or after being approved for an account) if your let your browser keep the HTTP cookie that identify your session (a 'delete' link is provided in the summary which is shown after your submit).<p>
-
+</br>
+</br>
 For more information, contact <A HREF="mailto:cbrain-support.mni@mcgill.ca">cbrain-support.mni@mcgill.ca</A>.
 
