@@ -28,7 +28,7 @@ class NewAccountOfferings
    # who will receive a message each time someone makes
    # a request for a service. You can put more than one
    # address in the string, each separated by commas.
-   AdminNotificationEmail = 'mia.petkova@gmail.com'
+   AdminNotificationEmail = 'pierre.rioux@mcgill.ca,marc.rousseau@mcgill.ca,cbrain-support.mni@mcgill.ca'
 #   AdminNotificationEmail = 'pierre.rioux@mcgill.ca'
 
    # The encrypted password to enter admin mode.
@@ -42,10 +42,10 @@ class NewAccountOfferings
    # a 32 characters MD5 hash. The full string needs to be set as the
    # value of the constant below.
    #AdminPassword = 'ox,ea280f79274d11af5d9a723a1348cf41'
-   AdminPassword = 'hj,27350749c29ea5065f8138ae8aa5a6bc'
+   AdminPassword = 'z2,b9fac79f2e45d040e0a644ce32b98a53'
 
    # List of usernames you accept as 'admins'
-   AdminUsernames = [ 'mia' ]
+   AdminUsernames = [ 'prioux', 'mero' ]
 
 end
 

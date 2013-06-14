@@ -41,7 +41,7 @@
 
 <% if ! @demand.confirmed? %>
 
-<p></br></br></br>
+<p>
 A confirmation email has been sent to the address you provided. Once you receive
 it, please click on the provided link so we can confirm your identity.
 
@@ -129,23 +129,6 @@ Below is a summary of the information you provided.
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-  </tr>
-
-  <tr>
-    <th>Time Zone:</th>
-    <td>
-      <%= @demand.time_zone.presence || "(None selected)" %>
-    </td>
-  </tr>
-
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-
-  <tr>
-    <th>Service requested:</th>
-    <td><%= NewAccountOfferings::ServiceList[@demand.service][0] %></td>
   </tr>
 
   <tr>

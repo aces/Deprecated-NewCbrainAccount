@@ -2,7 +2,7 @@
 <!--<h1>Account request form for the <%= the_organization %></h1>-->
 
 
-<div class="form_container" style="width:700px; margin:0 auto;">
+<div class="form_container">
 
   <%= form_for @demand, :url => { :action => (@demand.new_record? ? "create" : "update"), :id => @demand.id } do |f| %>
 
@@ -12,7 +12,7 @@
   <table class="form_table" align="center">
 
     <tr>
-      <th colspan="2" class="h1"><h1>Account request form for the BigBrain Database</h1></th>
+      <td class="mainheader" colspan="2"><h1>Account request form for the BigBrain Database</h1></td>
     </tr>
     <tr>
 	<td class="warning">Fields with an asterisk (*) are mandatory.</td>

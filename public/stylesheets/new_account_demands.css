@@ -10,9 +10,8 @@ body {
 h1 {
   font-family: Gill Sans, sans-serif !important;
   font-size: 175%;
-  float: left;
   color: #348b8d; 
-  margin: 0.5em 0 0.5em 0;
+  margin: 0.5em auto 0.5em auto;
   white-space: nowrap;
 }
 
@@ -48,22 +47,28 @@ h1 {
 
 .flash_notice {
   background: #eeffee;
-  border: 3px solid #00ff00;
+  border: none;  /* 3px solid #00ff00; */
   /*padding: 2px 1em;*/
-  display: table-cell;
+  display: table;
+  padding: 0.2em 2em;
+  margin: 0px auto;
+  color: #bf2d3b;
 }
 
 .flash_error {
   background: #ffeeee;
-  border: 3px solid #bf2d3b;
+  border: none; /* 3px solid #bf2d3b; */
 /*  padding: 2px 1em;*/
-  display: table-cell;
+  display: table;
+  color: #bf2d3b;
+  padding: 0.2em 2em;
+  margin: 0px auto;
 }
 
 .form_container {
-/*  display: table-cell;
-  /*width: 60%
-  margin: 1em;*/
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
   padding: 1em;
   background: #ededed;
   border: 3px solid #348b8d; /*black;*/
@@ -76,6 +81,10 @@ h1 {
 }
 
 .form_table td {
+}
+
+.form_table td h1 {
+  text-align: center;
 }
 
 .form_table th {
