@@ -8,7 +8,7 @@
 <table class="index_table">
 
 <tr>
-  <th colspan="9">
+  <th colspan="10">
     <% if @demands.count > 0 %>
       Showing records <%= start_i %> to <%= end_i %> of <%= @tot %>
       &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -34,6 +34,7 @@
   <th>Country</th>
   <th>Service Requested</th>
   <th>Comments?</th>
+  <th>Username</th>
   <th>Show/Edit</th>
   <th>Confirmed?</th>
   <th>Approved?</th>
@@ -48,6 +49,7 @@
   <td><%= crop_text(req.country) %></td>
   <td><%= req.service %></td>
   <td><%= req.comment.blank? ? "-" : '<span style="color: green">Yes!</span>'.html_safe %></td>
+  <td><%= req.login %></td>
   <td>
       <%= link_to "Show", :action => :show, :id => req.id %>
       /

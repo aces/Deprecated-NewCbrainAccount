@@ -1,4 +1,13 @@
 
+class ApprovalResult
+   attr_accessor :diagnostics, :plain_password
+
+   def to_s
+     self.diagnostics.presence.to_s
+   end
+
+end
+
 class Demand < ActiveRecord::Base
 
 #    t.string   "title"
@@ -78,7 +87,7 @@ class Demand < ActiveRecord::Base
     chars = (('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a).shuffle.reject { |c| c =~ /[01OolI]/ }
     salt  = chars[0] + chars[1]
     password = ""
-    10.times { password += chars[rand(chars.size)] }
+    12.times { password += chars[rand(chars.size)] }
 
     # LORIS convention:
     # UPDATE users SET Password_md5=concat('aa',MD5('aatest'));
@@ -108,7 +117,7 @@ class Demand < ActiveRecord::Base
       'Zip_code'        => :postal_code,
       'Country'         => :country,
       'Email'           => :email,
-      'Password_md5'    => salted_md5,
+      'Password_md5'    => salt + salted_md5,
       'Password_expiry' => Time.zone.now.strftime("%Y-%m-%d"),
       'CenterID'        => guest_psc.CenterID
     }
@@ -126,7 +135,11 @@ class Demand < ActiveRecord::Base
 
     loris_user.save!
 
-    nil
+    res = ApprovalResult.new;
+    res.plain_password = password
+    res.diagnostics    = ""
+
+    return res
   end
 
 end

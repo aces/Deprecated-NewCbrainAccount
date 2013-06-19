@@ -69,7 +69,7 @@ class DemandsController < ApplicationController
     if session[:admin].blank?
       redirect_to :action => :new
     end
-    @page_size = 25
+    @page_size = 50
     @page      = (params[:page].presence || "1").to_i
     @tot       = Demand.count
 
@@ -118,12 +118,12 @@ class DemandsController < ApplicationController
       return
     end
 
-    @info            = ""
+    result = nil
     @exception_trace = ""
 
     if @demand.respond_to?(:after_approval)
       begin
-        @info = @demand.after_approval
+        result = @demand.after_approval
         flash.now[:notice] = "The after_approval callback was successfully invoked."
       rescue => ex
         flash.now[:error] = "An exception was raised in the after_approval callback.";
@@ -132,12 +132,15 @@ class DemandsController < ApplicationController
       end
     end
 
+    @info          = result.diagnostics    rescue nil
+    plain_password = result.plain_password rescue nil
+
     if @exception_trace.blank?
       @demand.approved_by ||= session[:admin]
       @demand.approved_at ||= Time.now
       @demand.save
       flash.now[:notice] += "\nThe account request for '#{@demand.full}' has been approved."
-      send_account_created_email(@demand) && flash.now[:notice] += "\nThe user was notified of his new account."
+      send_account_created_email(@demand,plain_password) && flash.now[:notice] += "\nThe user was notified of his new account."
     end
 
   end
@@ -174,8 +177,8 @@ class DemandsController < ApplicationController
     return false
   end
 
-  def send_account_created_email(demand)
-    ConfirmMailer.account_created(demand).deliver
+  def send_account_created_email(demand, plain_password = nil)
+    ConfirmMailer.account_created(demand, plain_password).deliver
     return true
   rescue => ex
     Rails.logger.error ex.to_s
