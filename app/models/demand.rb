@@ -67,6 +67,7 @@ class Demand < ActiveRecord::Base
       val = read_attribute(att) || ""
       write_attribute(att, val.strip)
     end
+    self.login = (self.login.presence || "").downcase
     true
   end
 
@@ -81,6 +82,18 @@ class Demand < ActiveRecord::Base
   end
 
   alias full_name full
+
+  def self.uniq_login_cnts
+    login_cnts = {}
+    Demand.select(:login).all.each { |d| e=d.login.downcase;login_cnts[e] ||= 0;login_cnts[e] += 1 }
+    login_cnts
+  end
+
+  def self.uniq_email_cnts
+    email_cnts = {}
+    Demand.select(:email).all.each { |d| e=d.email.downcase;email_cnts[e] ||= 0;email_cnts[e] += 1 }
+    email_cnts
+  end
 
   def after_approval
     puts "Approving: #{self.full}"

@@ -10,6 +10,9 @@ NewAccount::Application.routes.draw do
       post 'resend_confirm'
       get  'confirm'
     end
+    collection do
+      post 'multi_action'
+    end
   end
 
   match 'auth/login',   :controller => :auth, :action => :login,  :via => :get

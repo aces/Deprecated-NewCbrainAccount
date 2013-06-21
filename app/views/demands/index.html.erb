@@ -5,21 +5,16 @@
 <% start_i    = (@page-1)*@page_size + 1 %>
 <% end_i      = start_i + @demands.size - 1 %>
 
+<%= form_tag({:action => :multi_action}, :method => :post) do %>
+
 <table class="index_table">
 
 <tr>
-  <th colspan="10">
+  <th colspan="9">
     <% if @demands.count > 0 %>
       Showing records <%= start_i %> to <%= end_i %> of <%= @tot %>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-      <% if numpages > 1 %>
-        Pages: <% 1.upto(numpages) do |p| %>
-          <% if @page == p %>
-            <strong><%= p %></strong>
-          <% else %>
-            <%= link_to "#{p}", :page => "#{p}" %>
-          <% end %>
-        <% end %>
+      <% if @real_tot > @tot %>
+        (out of <%= @real_tot %>)
       <% end %>
     <% else %>
       (No records to show)
@@ -27,47 +22,80 @@
   </th>
 </tr>
 
+<% if numpages > 1 %>
+  <tr><td colspan="9">
+  Pages: <% 1.upto(numpages) do |p| %>
+    <% if @page == p %>
+      <strong><%= p %></strong>
+    <% else %>
+      <%= link_to "#{p}", :page => "#{p}" %>
+    <% end %>
+  <% end %>
+  </td></tr>
+<% end %>
+
 <tr>
   <th>Full Name</th>
+  <th>CK</th>
   <th>Email</th>
   <th>Institution</th>
   <th>Country</th>
-  <th>Service Requested</th>
-  <th>Comments?</th>
   <th>Username</th>
+  <th>Comments?</th>
   <th>Show/Edit</th>
-  <th>Confirmed?</th>
-  <th>Approved?</th>
+  <th>Status</th>
 </tr>
+
+<% email_cnts = Demand.uniq_email_cnts %>
+<% login_cnts = Demand.uniq_login_cnts %>
 
 <% @demands.each do |req| %>
 
-<% dup_login = Demand.where(:login => req.login).count > 1 %>
+<% dup_email = email_cnts[req.email.downcase] > 1 %>
+<% dup_login = login_cnts[req.login.downcase] > 1 %>
+
 <tr>
   <td><%= crop_text(req.full) %></td>
-  <td><%= crop_text(req.email) %></td>
+
+  <td>
+    <% if req.confirmed? && !req.approved_by.presence && !dup_email && !dup_login %>
+      <%= check_box_tag 'reqids[]', req.id.to_s, false %>
+    <% end %>
+  </td>
+
+  <td>
+    <% if ! dup_email %>
+      <%= crop_text(req.email) %>
+    <% else %>
+    <span style="color: red"><%= crop_text(req.email) %></span>
+  <% end %>
+  </td>
+
   <td><%= crop_text(req.institution) %></td>
   <td><%= crop_text(req.country) %></td>
-  <td><%= req.service %></td>
-  <td><%= req.comment.blank? ? "-" : '<span style="color: green">Yes!</span>'.html_safe %></td>
 
-  <% if ! dup_login %>
-    <td><%= req.login %></td>
-  <% else %>
-    <td><span style="color: red"><%= req.login %></span></td>
-  <% end %>
+  <td>
+    <% if ! dup_login %>
+      <%= req.login %>
+    <% else %>
+      <span style="color: red"><%= req.login %></span>
+    <% end %>
+  </td>
+
+  <td><%= crop_text(req.comment,15) %></td>
 
   <td>
       <%= link_to "Show", :action => :show, :id => req.id %>
       /
       <%= link_to "Edit", :action => :edit, :id => req.id %>
   </td>
-  <td><%= req.confirmed? ? "Yes" : '<span style="color: red">NO!</span>'.html_safe %></td>
   <td>
      <% if req.approved_by.presence && req.approved_at.presence %>
-       By: <%= req.approved_by %> at <%= req.approved_at %>
+       OK by: <%= req.approved_by %> at <%= req.approved_at %>
      <% elsif dup_login %>
        <span style="color: red">(Conflicting name)</span>
+     <% elsif dup_email %>
+       <span style="color: purple">(Conflicting email)</span>
      <% elsif req.confirmed? %>
        <%= link_to "(Approve this)", approve_demand_path(req), :method => :post,
            :confirm => "Approve the application of \"#{req.full}\" for service \"#{req.service}\" ?" %>
@@ -81,8 +109,52 @@
 
 </table>
 
+<br>
+<%= submit_tag "Approve Checked Entries" %>
+
+<% end %>
+
 <p>
 
+<h3>Filter table
+   <%= link_to "Clear", :action => :index,
+       :institution_filter => "",
+       :email_filter       => "",
+       :country_filter     => "",
+       :approved_filter    => "",
+       :confirmed_filter   => ""
+   %>
+</h3>
+
+<%= form_tag({:action => :index}, :method => :get) do %>
+<table>
+<tr><td>Institution:</td><td><%= text_field_tag :institution_filter, session[:institution_filter] %></td></tr>
+<tr><td>Email:</td><td><%= text_field_tag :email_filter,       session[:email_filter] %></td></tr>
+<tr><td>Country:</td><td><%= text_field_tag :country_filter,     session[:country_filter] %></td></tr>
+
+<tr><td>Confirmed:</td>
+  <td>
+  Yes: <%= radio_button_tag :confirmed_filter, "1", session[:confirmed_filter] == '1' %>
+  No:  <%= radio_button_tag :confirmed_filter, "0", session[:confirmed_filter] == '0'%>
+  Any: <%= radio_button_tag :confirmed_filter, "",  session[:confirmed_filter] == '' %>
+  </td>
+</tr>
+
+<tr><td>Approved:</td>
+  <td>
+  Yes: <%= radio_button_tag :approved_filter, "1", session[:approved_filter] == '1' %>
+  No:  <%= radio_button_tag :approved_filter, "0", session[:approved_filter] == '0'%>
+  Any: <%= radio_button_tag :approved_filter, "",  session[:approved_filter] == '' %>
+  </td>
+</tr>
+
+<tr><th colspan="2"><%= submit_tag "Filter" %></th></tr>
+
+</table>
+
+<% end %>
+
+<p>
 <%= link_to "Create a new Account Request", :action => :new %>
 &nbsp; &nbsp; &nbsp;
 <%= link_to "De-authenticate", :controller => :auth, :action => :deauth %>
