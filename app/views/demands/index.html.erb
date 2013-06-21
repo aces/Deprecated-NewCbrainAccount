@@ -42,6 +42,7 @@
 
 <% @demands.each do |req| %>
 
+<% dup_login = Demand.where(:login => req.login).count > 1 %>
 <tr>
   <td><%= crop_text(req.full) %></td>
   <td><%= crop_text(req.email) %></td>
@@ -49,7 +50,13 @@
   <td><%= crop_text(req.country) %></td>
   <td><%= req.service %></td>
   <td><%= req.comment.blank? ? "-" : '<span style="color: green">Yes!</span>'.html_safe %></td>
-  <td><%= req.login %></td>
+
+  <% if ! dup_login %>
+    <td><%= req.login %></td>
+  <% else %>
+    <td><span style="color: red"><%= req.login %></span></td>
+  <% end %>
+
   <td>
       <%= link_to "Show", :action => :show, :id => req.id %>
       /
@@ -59,6 +66,8 @@
   <td>
      <% if req.approved_by.presence && req.approved_at.presence %>
        By: <%= req.approved_by %> at <%= req.approved_at %>
+     <% elsif dup_login %>
+       <span style="color: red">(Conflicting name)</span>
      <% elsif req.confirmed? %>
        <%= link_to "(Approve this)", approve_demand_path(req), :method => :post,
            :confirm => "Approve the application of \"#{req.full}\" for service \"#{req.service}\" ?" %>

@@ -31,7 +31,7 @@ class DemandsController < ApplicationController
     send_confirm_email(@demand)
     send_admin_notification(@demand)
 
-    sleep 3
+    sleep 1
     redirect_to :action => :show, :id => @demand.id
   end
 
@@ -61,7 +61,7 @@ class DemandsController < ApplicationController
 
     flash[:notice] = "The account request has been updated."
 
-    sleep 3
+    sleep 1
     redirect_to :action => :show, :id => @demand.id
   end
 
@@ -70,8 +70,10 @@ class DemandsController < ApplicationController
       redirect_to :action => :new
     end
     @page_size = 50
-    @page      = (params[:page].presence || "1").to_i
+    @page      = (params[:page].presence || session[:page].presence || "1").to_i
     @tot       = Demand.count
+
+    session[:page] = @page.to_s
 
     @demands = Demand.where(params[:filt] || {}).offset((@page-1) * @page_size).limit(@page_size).all
   end
@@ -154,7 +156,7 @@ class DemandsController < ApplicationController
 
     send_confirm_email(@demand) && flash[:notice] = "A new confirmation email has been sent."
 
-    sleep 3
+    sleep 1
     redirect_to :action => :show, :id => @demand.id
   end
 

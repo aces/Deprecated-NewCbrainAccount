@@ -16,7 +16,12 @@
 
     <h3>Approving this request:</h3>
 
-    You can also <%= link_to "approve", approve_demand_path(@demand), :method => :post, :confirm => "Approve the application of \"#{@demand.full}\" for service \"#{@demand.service}\" ?" %> this request.
+    <% if Demand.where(:login => @demand.login).count > 1 %>
+      This request cannot be approved until the login name is made different from any other.
+      You must <%= link_to "edit", :action => :edit %> the request.
+    <% else %>
+      You can also <%= link_to "approve", approve_demand_path(@demand), :method => :post, :confirm => "Approve the application of \"#{@demand.full}\" for service \"#{@demand.service}\" ?" %> this request.
+    <% end %>
 
     <% if ! @demand.confirmed? %>
       <span style="color: red">However, note that the user has not yet confirmed the email address.</span>
