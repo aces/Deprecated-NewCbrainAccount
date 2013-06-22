@@ -141,6 +141,19 @@ tr .pagelist {
   background: #eeeeee;
 }
 
+.suspicious {
+  background: #ffdddd;
+}
+.suspicious1 {
+  background: #ffcccc;
+}
+.suspicious2 {
+  background: #ff8888;
+}
+.suspicious3 {
+  background: #ff4444;
+}
+
 .note {
  font-size: 8pt;
  text-align: center;

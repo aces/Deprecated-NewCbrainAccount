@@ -51,11 +51,32 @@ class Demand < ActiveRecord::Base
                         :service, :confirm_token
 
   validates             :login, :length => { :minimum => 3, :maximum => 8 }, :allow_blank => true
-  validates             :login, :format => { :with => /^[a-zA-Z]\w+$/ }
+  validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
 
   #validates_length_of   :postal_code, :within => 5..10
+
+  OK_COUNTRIES_LIST = [
+   "Afganistan", "Albania", "ALGERIA",  "ANDORRA",   "Argentina",   "Australia",  "austria", "Azerbaijan",
+   "Belarus",   "Belgique", "Belgium",    "Bolivia",   "Brasil", "Brazil",  "Brunei", "Bulgaria",
+   "CA",  "Cambodia", "CAMEROON", "Canada",     "Chile", "China",  "Colombia", "Costa Rica", "Cuba",   "Cyprus", "Czech Republic",
+   "Danmark",   "Denmark", "Deutschland",   "Dominican Republic",  "Dutch Caribbean",
+   "ecuador", "egypt", "el salvador", "England", "Estonia", "Ethiopia",
+   "Finland",  "France",  "Georgia", "Germany", "Greece",  "Guatemala",  "holland", "Honduras", "Hong Kong",   "Hungary",
+   "Iceland", "India", "Indonesia",  "Iran", "Iraq", "Ireland",  "Israel", "Italia", "Italy",
+   "Japan",  "Kazakhstan", "Kenya",  "Korea",  "Kuwait",  "Latvia", "Lebanon",  "Liechtenstein",  "Lithuania",  "Luxembourg",
+   "Macau", "Madrid",  "Malaysia", "mali", "Malta",  "maroc", "Martinique",   "Mexico",  "Moldova", "montevideo",   "Morocco",
+   "Nederland",   "Nepal", "Netherland", "Netherlands",      "New Zealand", "Nicaragua",  "Nigeria",  "Northern Ireland", "Norway",
+   "Oman",  "Pakistan",  "Paraguay",   "Peru",  "Philippines", "Poland", "Polska",  "Portugal",  "Puerto Rico",  "Qatar",
+   "Republic of Korea",  "Romania",   "Russia",   "Russian Federation", "Rwanda",
+   "Saudi Arabia",  "Schweiz", "Scotland",  "Serbia",   "Singapore",  "Slovakia", "Slovenia", "South Africa", "south korea", "Spain", "sri lanka",  "St. Maarten",  "Suisse", "Suriname", "Sweden", "Switzerland",
+   "Taiwan",  "Thailand",  "The Netherlands", "Trinidad and Tobago",   "Tunisia", "turkey",
+   "U. S. A.", "U.K.", "U.S.", "U.S.A.", "UAE", "UK", "Ukraine",  "United Arab Emirates", "United Kingdom",    "United States", "United States of America",  "Uruguay", "US", "USA", 
+   "Venezuela",  "Vietnam",  "Wales"
+  ]
+  OK_COUNTRIES_HASH = {}; OK_COUNTRIES_LIST.each { |c| OK_COUNTRIES_HASH[c.downcase]=true }
+
 
   def strip_blanks
     [
@@ -79,6 +100,15 @@ class Demand < ActiveRecord::Base
 
   def full
     "#{title} #{first} #{middle} #{last}".strip.gsub(/  +/, " ")
+  end
+
+  def is_suspicious?  # types: 1=warning, 2=weird_entries, 3=keyboard_banging
+    country = (self.country.presence || "").downcase
+    return 3 if "#{full_name}#{institution}#{department}#{email}#{comment}#{postal_code}#{street1}#{street2}" =~ /asd|sdf|qw|zxc|xcv|shit|fuck/i
+    return 2 if first.downcase == last.downcase || first.downcase == middle.downcase || middle.downcase == last.downcase
+    return 2 if first.downcase !~ /[a-z]/i || last.downcase !~ /[a-z]/i
+    return 1 unless OK_COUNTRIES_HASH[country]
+    nil
   end
 
   alias full_name full
@@ -110,7 +140,7 @@ class Demand < ActiveRecord::Base
     mylogin = self.login.presence || (self.first[0,1] + self.last).downcase
     self.login = mylogin
     unless self.valid?
-       Raise "Current record is invalid. Probably: login name incorrect. Check form values."
+       raise "Current record is invalid. Probably: login name incorrect. Check form values."
     end
 
     guest_psc  = LorisPsc.find_by_Alias('GST') # must have been created manually by the admin
