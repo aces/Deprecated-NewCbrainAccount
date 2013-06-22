@@ -129,6 +129,18 @@ textarea {
   white-space: nowrap;
 }
 
+tr .pagelist {
+  white-space: normal;
+}
+
+.index_even {
+  background: #ffffff;
+}
+
+.index_odd {
+  background: #eeeeee;
+}
+
 .note {
  font-size: 8pt;
  text-align: center;

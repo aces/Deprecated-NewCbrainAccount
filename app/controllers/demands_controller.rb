@@ -76,6 +76,7 @@ class DemandsController < ApplicationController
 
     session[:institution_filter] = params[:institution_filter] if params.has_key?(:institution_filter)
     session[:email_filter]       = params[:email_filter]       if params.has_key?(:email_filter)
+    session[:login_filter]       = params[:login_filter]       if params.has_key?(:login_filter)
     session[:country_filter]     = params[:country_filter]     if params.has_key?(:country_filter)
     session[:approved_filter]    = params[:approved_filter]    if params.has_key?(:approved_filter)
     session[:confirmed_filter]   = params[:confirmed_filter]   if params.has_key?(:confirmed_filter)
@@ -83,6 +84,7 @@ class DemandsController < ApplicationController
     @demands = Demand.where({})
     @demands = @demands.where(["institution like ?", "%#{session[:institution_filter]}%"]) if session[:institution_filter].present?
     @demands = @demands.where(["email like ?",       "%#{session[:email_filter]}%"])       if session[:email_filter].present?
+    @demands = @demands.where(["login like ?",       "%#{session[:login_filter]}%"])       if session[:login_filter].present?
     @demands = @demands.where(["country like ?",     "%#{session[:country_filter]}%"])     if session[:country_filter].present?
     @demands = @demands.where("approved_at is not null")                            if session[:approved_filter] == "1"
     @demands = @demands.where(:approved_at => nil)                                  if session[:approved_filter] == "0"

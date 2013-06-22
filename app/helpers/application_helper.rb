@@ -1,3 +1,26 @@
+
+class Hash
+
+      # Turns a hash table into a string suitable to be used
+      # as HTML element attributes.
+      #
+      #   { "colspan" => 3, :style => "color: #ffffff", :x => '<>' }.to_html_attributes
+      #
+      # will return the string
+      #
+      #   'colspan="3" style="color: blue" x="&lt;&gt;"'
+      def to_html_attributes
+        self.inject("") do |result,attpair|
+          attname   = attpair[0]
+          attvalue  = attpair[1]
+          result   += " " if result.present?
+          result   += "#{attname}=\"#{ERB::Util.html_escape(attvalue)}\""
+          result
+        end
+      end
+
+end
+
 module ApplicationHelper
 
   def crop_text(text,len = 30)
@@ -9,6 +32,19 @@ module ApplicationHelper
 
   def the_organization
     NewAccountOfferings::TheOrganizationShortName
+  end
+
+  #Create a checkbox that will select or deselect all checkboxes on the page 
+  #of class +checkbox_class+.
+  #+options+ are just treated as HTML attributes.
+  def select_all_checkbox(checkbox_class, options = {})
+    options[:class] ||= ""
+    options[:class] +=  " select_all"
+
+    options["data-checkbox-class"] = checkbox_class
+    atts = options.to_html_attributes
+
+    "<input type='checkbox' #{atts}/>".html_safe
   end
 
 end
