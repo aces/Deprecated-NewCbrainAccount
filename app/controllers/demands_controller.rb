@@ -70,8 +70,10 @@ class DemandsController < ApplicationController
       redirect_to :action => :new
     end
 
-    @page_size = 50
-    @page      = (params[:page].presence || session[:page].presence || "1").to_i
+    @page_size = (params[:page_size].presence || session[:page_size]     || 100).to_i
+    session[:page_size] = @page_size
+
+    @page      = (params[:page].presence      || session[:page].presence || "1").to_i
     @real_tot  = Demand.count
 
     session[:institution_filter] = params[:institution_filter] if params.has_key?(:institution_filter)
@@ -86,8 +88,8 @@ class DemandsController < ApplicationController
     @demands = @demands.where(["email like ?",       "%#{session[:email_filter]}%"])       if session[:email_filter].present?
     @demands = @demands.where(["login like ?",       "%#{session[:login_filter]}%"])       if session[:login_filter].present?
     @demands = @demands.where(["country like ?",     "%#{session[:country_filter]}%"])     if session[:country_filter].present?
-    @demands = @demands.where("approved_at is not null")                            if session[:approved_filter] == "1"
-    @demands = @demands.where(:approved_at => nil)                                  if session[:approved_filter] == "0"
+    @demands = @demands.where("approved_by is not null")                            if session[:approved_filter] == "1"
+    @demands = @demands.where(:approved_by => nil)                                  if session[:approved_filter] == "0"
     @demands = @demands.where("confirmed is not null")                              if session[:confirmed_filter] == "1"
     @demands = @demands.where(:confirmed => nil)                                    if session[:confirmed_filter] == "0"
     @tot     = @demands.count
@@ -175,6 +177,66 @@ class DemandsController < ApplicationController
       return
     end
 
+    if params[:commit] =~ /approve/i
+      return approve_multi
+    end
+
+    if params[:commit] =~ /fix|login/i
+      return fix_login_multi
+    end
+
+    redirect_to :action => :index
+  end
+
+  def fix_login_multi
+
+    reqids = params[:log_reqids] || []
+    reqs = Demand.find(reqids)
+
+    login_cnts = Demand.uniq_login_cnts
+
+    @results = reqs.map do |req|
+
+      old   = req.login
+      new   = ""
+      puts "Fixing: #{old}"
+
+      email = req.email
+      if email =~ /^(\w+)@/
+        new = Regexp.last_match[1].downcase
+      end
+      new = "" if new.size < 3 || new.size > 8
+      new = "" if (login_cnts[new] || 0) > 0
+
+      if new.blank?
+        new = (req.first[0,1] + req.last[0,7]).downcase
+      end
+      new = "" if new !~ /^[a-z][a-zA-Z0-9]+$/
+      new = "" if new.size < 3 || new.size > 8
+      new = "" if (login_cnts[new] || 0) > 0
+
+      if new.blank?
+          puts "  -> No changes"
+        [ req, 'No changes', nil ]
+      else
+        backtrace = nil
+        begin
+          req.update_attribute(:login, new)
+          puts "  -> #{old} => #{new}"
+        rescue => ex
+          backtrace = ex.backtrace
+        end
+        message = backtrace ? "Attempted" : "Adjusted"
+        [ req, "#{message}: #{old} => #{new}", backtrace ]
+      end
+
+    end
+     
+    render :action => :multi_approve
+  end
+
+  def approve_multi
+
     reqids = params[:reqids] || []
     reqs = Demand.find(reqids)
 
@@ -245,7 +307,7 @@ class DemandsController < ApplicationController
   rescue => ex
     Rails.logger.error ex.to_s
     flash.now[:error] ||= ""
-    flash.now[:error]  += "It seems some error occured. The email telling the user the account was created was probably not sent."
+    flash.now[:error]  += "It seems some error occured for record #{demand.id} (#{demand.full_name}). The email telling the user the account was created was probably not sent."
     return false
   end
 
