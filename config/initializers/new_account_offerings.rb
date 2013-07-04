@@ -13,7 +13,7 @@ class NewAccountOfferings
 
    # Enter the 'FROM' value for the emails that will
    # be sent for confirmation.
-   EmailFrom = 'noreply@cbrain.mcgill.ca'
+   EmailFrom = 'noreply@bigbrain.cbrain.mcgill.ca'
 
    # A list of services that will be shown in the new request form.
    # Provide a short, one line description, and the main URL for the service.
@@ -45,7 +45,7 @@ class NewAccountOfferings
    AdminPassword = 'z2,b9fac79f2e45d040e0a644ce32b98a53'
 
    # List of usernames you accept as 'admins'
-   AdminUsernames = [ 'prioux', 'mero' ]
+   AdminUsernames = [ 'prioux', 'mero', 'tsherif' ]
 
 end
 

@@ -102,9 +102,16 @@ class Demand < ActiveRecord::Base
     "#{title} #{first} #{middle} #{last}".strip.gsub(/  +/, " ")
   end
 
+  def approved?
+    self.approved_by.present? && self.approved_at.present?
+  end
+
   def is_suspicious?  # types: 1=warning, 2=weird_entries, 3=keyboard_banging
     country = (self.country.presence || "").downcase
-    return 3 if "#{full_name}#{institution}#{department}#{email}#{comment}#{postal_code}#{street1}#{street2}" =~ /asd|sdf|qw|zxc|xcv|shit|fuck/i
+    full_cat = "#{full_name}|#{institution}|#{department}|#{email}|#{country}|#{province}|#{city}|#{postal_code}|#{street1}|#{street2}|#{comment}|#{login}".downcase
+    return 3 if full_cat =~ /qwe|tyu|uio|asd|sdf|dfg|fgh|hjk|jkl|zxc|xcv|cvb|vbn|bnm/i # keyboard banging
+    return 3 if full_cat =~ /shit|fuck|cunt|blah|piss|vagina|mother|nigg|negro/i # obscenities
+    return 3 if full_cat =~ /([a-z])\1\1\1/i
     return 2 if first.downcase == last.downcase || first.downcase == middle.downcase || middle.downcase == last.downcase
     return 2 if first.downcase !~ /[a-z]/i || last.downcase !~ /[a-z]/i
     return 1 unless OK_COUNTRIES_HASH[country]
@@ -126,7 +133,7 @@ class Demand < ActiveRecord::Base
   end
 
   def after_approval
-    puts "Approving: #{self.full}"
+    #puts "Approving: #{self.full}"
     chars = (('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a).shuffle.reject { |c| c =~ /[01OolI]/ }
     salt  = chars[0] + chars[1]
     password = ""
@@ -183,6 +190,21 @@ class Demand < ActiveRecord::Base
     res.diagnostics    = ""
 
     return res
+  end
+
+  def account_exists?
+    return false if self.email.blank?
+    LorisUser.where(:Email => self.email).first
+  end
+
+  def after_failed_user_notification
+    puts "Cancelling: #{self.full}"
+
+    loris_user = self.account_exists?
+    return false unless loris_user
+
+    loris_user.destroy
+    true
   end
 
 end
