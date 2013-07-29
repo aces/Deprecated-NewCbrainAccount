@@ -216,6 +216,10 @@ class DemandsController < ApplicationController
       return delete_multi
     end
 
+    if params[:commit] =~ /undo approval/i
+      return undo_app_multi
+    end
+
     redirect_to :action => :index
   end
 
@@ -234,6 +238,42 @@ class DemandsController < ApplicationController
     flash[:notice] = "Deleted #{count} records."
 
     redirect_to :action => :index
+  end
+
+
+
+  def undo_app_multi
+
+    reqids = params[:undoapp_reqids] || []
+    reqs = Demand.find(reqids)
+
+    # TODO: optimize whole process when no after_failed_user_notification() method
+
+    @results = reqs.map do |req|
+      next unless req.account_exists?
+      next unless req.approved?
+
+      puts "Undoing approval for account: #{req.full_name}"
+
+      if req.respond_to?(:undo_approval)
+        begin
+          if req.undo_approval
+            req.approved_by = nil
+            req.approved_at = nil
+            req.save
+          end
+          [ req, :all_ok, 'Undid approval.', nil ]
+        rescue => ex
+          exception_trace = "#{ex.class}: #{ex.message}\n" + ex.backtrace.join("\n")
+          [ req, :failed_unapproving_account, 'ERROR: Exception when un-approving account' , exception_trace ]
+        end
+      else
+        [ req, :no_operation, 'Warning: No support for un-approving.', nil ]
+      end
+
+    end
+
+    render :action => :multi_action
   end
 
 

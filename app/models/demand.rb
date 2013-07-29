@@ -207,5 +207,15 @@ class Demand < ActiveRecord::Base
     true
   end
 
+  def undo_approval
+    puts "Undo approval: #{self.full}"
+
+    loris_user = self.account_exists?
+    return false unless loris_user
+
+    loris_user.destroy
+    true
+  end
+
 end
 
