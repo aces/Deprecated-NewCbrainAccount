@@ -131,6 +131,7 @@
   <td>
 
      <% if req.approved_by.presence && req.approved_at.presence %>
+       <%= check_box_tag 'undoapp_reqids[]', req.id.to_s, false, :class => 'undoapp_reqid' %>
        OK by: <%= req.approved_by %> at <%= req.approved_at %>
      <% elsif ! req.confirmed? %>
        <%= dup_email ? "" : check_box_tag('notconf_reqids[]', req.id.to_s, false, :class => 'notconf_reqid') %>
@@ -166,6 +167,7 @@
   <td colspan="1">
     <%= submit_tag "Resend Conf" %>
     <%= submit_tag "Clean Not Notified" %>
+    <%= submit_tag "Undo Approval" %>
   </td>
 </tr>
 
