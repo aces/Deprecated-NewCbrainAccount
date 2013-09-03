@@ -32,7 +32,7 @@ gem 'rails', '3.1.10'
 
 gem 'thin'
 gem 'dynamic_form'
-gem 'mysql'
+gem 'mysql2'
 gem 'sqlite3'
 gem 'jquery-rails', '~> 2.1'
 
