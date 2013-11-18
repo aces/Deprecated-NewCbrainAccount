@@ -273,6 +273,8 @@ class DemandsController < ApplicationController
 
     end
 
+    @results.compact!
+
     render :action => :multi_action
   end
 
@@ -305,6 +307,8 @@ class DemandsController < ApplicationController
 
     end
 
+    @results.compact!
+
     render :action => :multi_action
   end
 
@@ -326,6 +330,8 @@ class DemandsController < ApplicationController
         [ req, :failed_confirm, "ERROR: Could not send confirmation email", nil ]
       end
     end
+
+    @results.compact!
 
     render :action => :multi_action
 
@@ -377,6 +383,8 @@ class DemandsController < ApplicationController
 
     end
      
+    @results.compact!
+
     render :action => :multi_action
   end
 
@@ -394,6 +402,8 @@ class DemandsController < ApplicationController
       #message = "Account created and user notified" if message.blank? && symbolic_result == :all_ok
       [ req, symbolic_result, message, backtrace ]
     end
+
+    @results.compact!
 
     render :action => :multi_action
   end
