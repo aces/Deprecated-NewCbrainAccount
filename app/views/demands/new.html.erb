@@ -1,25 +1,24 @@
 
-<!--<h1>Account request form for the <%= the_organization %></h1>-->
-
-
 <div class="form_container">
 
   <%= form_for @demand, :url => { :action => (@demand.new_record? ? "create" : "update"), :id => @demand.id } do |f| %>
 
   <%= f.error_messages %>
 
+  <table class="form_table">
 
-  <table class="form_table" align="center">
+    <tr>
+      <td class="mainheader" colspan="2"><h1>Account request form for <%= the_organization %></h1></td>
+    </tr>
 
     <tr>
-      <td class="mainheader" colspan="2"><h1>Account request form for the BigBrain Database</h1></td>
+	<td class="warning" colspan="2">Fields with an asterisk (*) are mandatory.</td>
     </tr>
+
     <tr>
-	<td class="warning">Fields with an asterisk (*) are mandatory.</td>
+	<td colspan="2">&nbsp;</td>
     </tr>
-    <tr>
-    </tr>
-	<td>&nbsp;</td>
+
     <tr>
       <th>Title:</th>
       <td><%= f.text_field :title, :size => 10 %> <span class="field_note">(e.g. 'Mr.', 'Dr.', etc.)</span></td>
@@ -106,25 +105,26 @@
       <td><%= f.text_field :postal_code, :size => 8 %></td>
     </tr>
 
-
-  <!--  <tr>
+    <tr>
       <th>Time Zone:</th>
       <td>
--->
-    <%if false%>    <%= f.time_zone_select :time_zone,
+        <%= f.time_zone_select :time_zone,
             ActiveSupport::TimeZone.all.select { |t| t.name =~ /canada/i },
             { :default => ActiveSupport::TimeZone['Eastern Time (US & Canada)'], :include_blank => true }
         %> 
-<%end%>
-<!--
      </td>
     </tr>
+
     <tr>
       <td colspan="2" class="section_separator">&nbsp;</td>
     </tr>
 
--->
-
+    <tr>
+      <th>* Service you request:</th>
+      <td>
+        <%= f.select :service, options_for_select( [ [ "(select one)", "" ] ] + NewAccountOfferings::ServiceList.map { |k,pair| [ pair[0], k ] }, @demand.service) %>
+      </td>
+    </tr>
 
     <tr>
       <th>Comments or special requests:</th>
@@ -137,29 +137,11 @@
 
     <tr>
       <td colspan="2">
-<center>
-<h3 style="color: red">Important note! (June 20th, 2013)</h3>
-Because of the high number of requests for accounts,<br>
-it is possible that it may take <strong>several days</strong> before<br>
-your own account is created. Don't despair and be<br>
-patient, we approve almost all requests, eventually.<br>
-And thank you for your interest!
-<p>
-</center>
-      </td>
-    <tr>
-
-    <tr>
-      <td colspan="2">
-        <center><%= f.submit(@demand.new_record? ? "Request Account" : "Update Request") %>
-<!--        <span class="field_note">(There's a delay of 3 seconds after submission)</span>-->
-        </center>
+        <center><%= f.submit(@demand.new_record? ? "Request Account" : "Update Request") %></center>
       </td>
     </tr>
 
   </table>
-
-  <%= f.hidden_field :service, :value => 'BigBrain Access' %>
 
   <% end %>
 
@@ -174,19 +156,10 @@ The information you supply in this form is
 only used in order to review your application and, when approved, to
 automatically generate your user account. <br>
 This information will not be used in any other way, or passed on to
-any other entities or persons. <!--In the end, only four (4) copies of this
-information is stored:
+any other entities or persons.
 
-<UL class = "note">
-<LI>The NewAccount application, which shows you this form right now, has your information in a small database.</LI>
-<LI>If your application is approved, some or all the fields are used to create your user account on the service.</LI>
-<LI>The system logs of the NewAccount application retains that information until log rotations (usually a few weeks).</LI>
-<LI>System backups of the server which runs this application may also preserve the logs and database content for some weeks.</LI>
-</UL>
--->
-<!--These last two copies are just standard computer system maintenance procedures.-->
 <br>
-You can elect to delete the information in the NewAccount database at any time. <!-- if your let your browser keep the HTTP cookie that identify your session (a 'delete' link is provided in the summary which is shown after your submit).-->
+You can elect to delete the information in the NewAccount database at any time.
 
 <br>
 <br>
