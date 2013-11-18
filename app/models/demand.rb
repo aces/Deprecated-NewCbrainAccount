@@ -47,11 +47,11 @@ class Demand < ActiveRecord::Base
 
   validates_presence_of :first, :last,
                         :institution, :department, :position, :email,
-                        :province, :country,
+                        :city, :province, :country,
                         :service, :confirm_token
 
-  validates             :login, :length => { :minimum => 3, :maximum => 8 }, :allow_blank => true
-  validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }
+  validates             :login, :length => { :minimum => 3, :maximum => 8 },      :allow_blank => true
+  validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }, :allow_blank => true
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
 
@@ -139,72 +139,81 @@ class Demand < ActiveRecord::Base
     password = ""
     12.times { password += chars[rand(chars.size)] }
 
-    # LORIS convention:
-    # UPDATE users SET Password_md5=concat('aa',MD5('aatest'));
-
-    salted_md5 = Digest::MD5.hexdigest( salt + password )
-
     mylogin = self.login.presence || (self.first[0,1] + self.last).downcase
     self.login = mylogin
     unless self.valid?
        raise "Current record is invalid. Probably: login name incorrect. Check form values."
     end
 
-    guest_psc  = LorisPsc.find_by_Alias('GST') # must have been created manually by the admin
-    loris_user = LorisUser.new
+#    t.string   "title"
+#    t.string   "first"
+#    t.string   "middle"
+#    t.string   "last"
+#    t.string   "institution"
+#    t.string   "department"
+#    t.string   "position"
+#    t.string   "email"
+#    t.string   "street1"
+#    t.string   "street2"
+#    t.string   "city"
+#    t.string   "province"
+#    t.string   "country"
+#    t.string   "postal_code"
+#    t.string   "time_zone"
+#    t.string   "login"
 
-    att_map = { # values will be escaped later on
-      'UserID'          => :login,
-      'Real_name'       => self.full_name,
-      'First_name'      => :first,
-      'Last_name'       => :last,
-      'Position_title'  => :position,
-      'Institution'     => :institution,
-      'Department'      => :department,
-      'Address'         => "#{self.street1} #{self.street2}",
-      'City'            => :city,
-      'State'           => :province,
-      'Zip_code'        => :postal_code,
-      'Country'         => :country,
-      'Email'           => :email,
-      'Password_md5'    => salt + salted_md5,
-      'Password_expiry' => Time.zone.now.strftime("%Y-%m-%d"),
-      'CenterID'        => guest_psc.CenterID
-    }
+    att = {
+      "full_name"             => self.full,
+      "login"                 => self.login,
+      "email"                 => self.email,
+      "city"                  => self.city,
+      "country"               => self.country,
+      "time_zone"             => self.time_zone,
+      "type"                  => 'NormalUser',
+      "password"              => password,
+      "password_confirmation" => password,
+      "password_reset"        => true,
+      }
 
-    att_map.each do |col,val|
-      val = self.send(val) if val.is_a?(Symbol) # symbols are fetched as attributes of demand object
-      accessor = col.to_sym
-      begin
-        loris_user.send("#{accessor}=", val)
-      rescue
-        Rails.logger.error "Bad att pair: #{accessor} = #{val}"
-        raise
-      end
+    agent = NewAccountOfferings::CbrainApiAgent
+    uid = agent.create_user( att )
+
+    if ! agent.cbrain_success
+      raise "#{agent.error_message}"
     end
-
-    loris_user.save!
 
     res = ApprovalResult.new;
     res.plain_password = password
-    res.diagnostics    = ""
+    res.diagnostics    = "Created as UID #{uid}"
 
     return res
   end
 
   def account_exists?
     return false if self.email.blank?
-    LorisUser.where(:Email => self.email).first
+    agent = NewAccountOfferings::CbrainApiAgent
+    userlist = agent.index_users( :email => self.email )
+    return false if userlist.blank?
+    return userlist[0]
+  end
+
+  def undo_approval
+    puts "Cancelling: #{self.full}"
+    
+    cbrain_user = self.account_exists?
+    return false unless cbrain_user
+
+    agent = NewAccountOfferings::CbrainApiAgent
+    id    = cbrain_user["id"][0]["content"] rescue nil # darn stupid structure returned by XmlSimple
+    return false unless id
+    agent.destroy_user(id)
+    agent.cbrain_success
+  rescue
+    false
   end
 
   def after_failed_user_notification
-    puts "Cancelling: #{self.full}"
-
-    loris_user = self.account_exists?
-    return false unless loris_user
-
-    loris_user.destroy
-    true
+    undo_approval
   end
 
   def undo_approval

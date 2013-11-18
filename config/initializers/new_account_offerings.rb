@@ -1,4 +1,6 @@
 
+require 'cbrain_ruby_api'
+
 # This file describe what service you are and
 # what offerings you propose. The values in this
 # file will be used to customize the forms and email
@@ -9,18 +11,18 @@ class NewAccountOfferings
    # the new account. It will usually be used in
    # a context where a leading "THE" will be required,
    # so make sure it sounds good that way.
-   TheOrganizationShortName = "The BigBrain Data Server"
+   TheOrganizationShortName = "The CBRAIN Group"
 
    # Enter the 'FROM' value for the emails that will
    # be sent for confirmation.
-   EmailFrom = 'noreply@bigbrain.cbrain.mcgill.ca'
+   EmailFrom = 'no-reply-cbrain@mcgill.ca'
 
    # A list of services that will be shown in the new request form.
    # Provide a short, one line description, and the main URL for the service.
    # This list will be shown in a selection box in the
    # main form.
    ServiceList = {
-     'BigBrain Access'        => [ 'Access to the BigBrain dataset', "https://bigbrain.loris.ca/" ],
+     'CBRAIN Portal'        => [ 'Access to the CBRAIN Portal', "https://portal.cbrain.mcgill.ca/" ],
    }
 
    # Admin email address(es) for notification of new requests.
@@ -42,10 +44,14 @@ class NewAccountOfferings
    # a 32 characters MD5 hash. The full string needs to be set as the
    # value of the constant below.
    #AdminPassword = 'ox,ea280f79274d11af5d9a723a1348cf41'
-   AdminPassword = 'z2,b9fac79f2e45d040e0a644ce32b98a53'
+   AdminPassword = 'P7,f9c1bd7df146d0fa2349e6113252414e'
 
    # List of usernames you accept as 'admins'
    AdminUsernames = [ 'prioux', 'mero', 'tsherif' ]
+
+   # Persistent agent for the connection
+   CbrainApiAgent = CbrainRubyAPI.new( 'https://portal.cbrain.mcgill.ca' )
+   CbrainApiAgent.login('admin_reqserv', 'todo') or raise("Cannot authenticate with CBRAIN?")
 
 end
 

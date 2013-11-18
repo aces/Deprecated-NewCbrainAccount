@@ -247,7 +247,7 @@ class DemandsController < ApplicationController
     reqids = params[:undoapp_reqids] || []
     reqs = Demand.find(reqids)
 
-    # TODO: optimize whole process when no after_failed_user_notification() method
+    # TODO: optimize whole process when no undo_approval() method
 
     @results = reqs.map do |req|
       next unless req.account_exists?
@@ -261,8 +261,10 @@ class DemandsController < ApplicationController
             req.approved_by = nil
             req.approved_at = nil
             req.save
+            [ req, :all_ok, 'Undid approval.', nil ]
+          else
+            [ req, :failed, 'Did not undo approval.', nil ]
           end
-          [ req, :all_ok, 'Undid approval.', nil ]
         rescue => ex
           exception_trace = "#{ex.class}: #{ex.message}\n" + ex.backtrace.join("\n")
           [ req, :failed_unapproving_account, 'ERROR: Exception when un-approving account' , exception_trace ]
@@ -272,6 +274,8 @@ class DemandsController < ApplicationController
       end
 
     end
+
+    @results.compact!
 
     render :action => :multi_action
   end
@@ -305,6 +309,8 @@ class DemandsController < ApplicationController
 
     end
 
+    @results.compact!
+
     render :action => :multi_action
   end
 
@@ -327,8 +333,9 @@ class DemandsController < ApplicationController
       end
     end
 
-    render :action => :multi_action
+    @results.compact!
 
+    render :action => :multi_action
   end
 
 
@@ -377,6 +384,8 @@ class DemandsController < ApplicationController
 
     end
      
+    @results.compact!
+
     render :action => :multi_action
   end
 
@@ -394,6 +403,8 @@ class DemandsController < ApplicationController
       #message = "Account created and user notified" if message.blank? && symbolic_result == :all_ok
       [ req, symbolic_result, message, backtrace ]
     end
+
+    @results.compact!
 
     render :action => :multi_action
   end
