@@ -47,11 +47,11 @@ class Demand < ActiveRecord::Base
 
   validates_presence_of :first, :last,
                         :institution, :department, :position, :email,
-                        :province, :country,
+                        :city, :province, :country,
                         :service, :confirm_token
 
-  validates             :login, :length => { :minimum => 3, :maximum => 8 }, :allow_blank => true
-  validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }
+  validates             :login, :length => { :minimum => 3, :maximum => 8 },      :allow_blank => true
+  validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }, :allow_blank => true
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
 

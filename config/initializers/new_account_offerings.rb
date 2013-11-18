@@ -11,7 +11,7 @@ class NewAccountOfferings
    # the new account. It will usually be used in
    # a context where a leading "THE" will be required,
    # so make sure it sounds good that way.
-   TheOrganizationShortName = "The CBRAIN Service"
+   TheOrganizationShortName = "The CBRAIN Group"
 
    # Enter the 'FROM' value for the emails that will
    # be sent for confirmation.
