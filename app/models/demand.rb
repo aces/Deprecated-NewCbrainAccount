@@ -190,10 +190,10 @@ class Demand < ActiveRecord::Base
   end
 
   def account_exists?
-    return false if self.email.blank?
+    return nil if self.email.blank?
     agent = NewAccountOfferings::CbrainApiAgent
-    userlist = agent.index_users( :email => self.email )
-    return false if userlist.blank?
+    userlist = agent.index_users( :email => self.email, :login => self.login )
+    return nil if userlist.blank?
     return userlist[0]
   end
 
