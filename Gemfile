@@ -36,5 +36,5 @@ gem 'mysql2'
 gem 'sqlite3'
 gem 'jquery-rails', '~> 2.1'
 
-gem 'httpclient'
+gem 'httpclient', '> 2.6.0'
 gem 'xml-simple'

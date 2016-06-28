@@ -57,7 +57,7 @@
 
 <% dup_email   = email_cnts[req.email.downcase] > 1 %>
 <% dup_login   = login_cnts[req.login.downcase] > 1 %>
-<% dest_exists = req.account_exists? %>
+<% # dest_exists = req.account_exists? %>
 
 <% if session[:dupemail_filter].present? && prev_email != "" && req.email.downcase != prev_email.downcase%>
   <tr><td colspan="9" style="background: black"></td></tr>
@@ -140,7 +140,7 @@
        <span style="color: red">(Conflicting name)</span>
      <% elsif dup_email %>
        <span style="color: #ff00ff">(Conflicting email)</span>
-     <% elsif dest_exists %>
+     <% elsif req.account_exists? %>
        <%= check_box_tag 'notnotif_reqids[]', req.id.to_s, false, :class => 'notnotif_reqid' %>
        <span style="color: orange">(Exist yet not notified)</span>
      <% else %>

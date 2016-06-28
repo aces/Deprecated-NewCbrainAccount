@@ -50,7 +50,7 @@ class Demand < ActiveRecord::Base
                         :city, :province, :country,
                         :service, :confirm_token
 
-  validates             :login, :length => { :minimum => 3, :maximum => 8 },      :allow_blank => true
+  validates             :login, :length => { :minimum => 3, :maximum => 20 },     :allow_blank => true
   validates             :login, :format => { :with => /^[a-zA-Z][a-zA-Z0-9]+$/ }, :allow_blank => true
 
   validates             :email, :format => { :with => /^(\w[\w\-\.]*)@(\w[\w\-]*\.)+[a-z]{2,}$|^\w+@localhost$/i }
@@ -192,7 +192,7 @@ class Demand < ActiveRecord::Base
   def account_exists?
     return nil if self.email.blank?
     agent = NewAccountOfferings::CbrainApiAgent
-    userlist = agent.index_users( :email => self.email, :login => self.login )
+    userlist = agent.index_users( :email => self.email, :login => self.login, :_simple_filters => 1 )
     return nil if userlist.blank?
     return userlist[0]
   end

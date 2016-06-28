@@ -41,7 +41,7 @@
 
     <tr>
       <th>Preferred 'login' name:</th>
-      <td><%= f.text_field :login, :size => 10 %> <span class="field_note">(one letter + alphanums, between 3 and 8 characters)</span></td>
+      <td><%= f.text_field :login, :size => 10 %> <span class="field_note">(one letter + alphanums, between 3 and 20 characters)</span></td>
     </tr>
 
     <tr>
@@ -67,8 +67,10 @@
     </tr>
 
     <tr>
-      <th>* Email address:</th>
-      <td><%= f.text_field :email, :size => 60 %></td>
+      <th>* Institutional Email address:</th>
+      <td><%= f.text_field :email, :size => 60 %>
+        <br><small>Please supply an address from your research institution</small>
+      </td>
     </tr>
 
     <tr>
@@ -128,7 +130,14 @@
 
     <tr>
       <th>Comments or special requests:</th>
-      <td><%= f.text_area :comment %></td>
+      <td>
+          <%= f.text_area :comment %>
+          <br>
+          <small>
+                 Please tell us the name of the laboratory you work for, the name of its Principal Investigator (if not you), and if possible anyone<br>
+                 else you know in your lab who are already CBRAIN users. We'll use this information to create or add you to a <em>Site</em> within CBRAIN.
+          </small>
+      </td>
     </tr>
 
     <tr>
