@@ -2,6 +2,7 @@
 <h1>Batch action summary results</h1>
 
 <%
+   @results.compact!
    @results.each do |tuple|
      demand    = tuple[0]
      sym_res   = tuple[1]
