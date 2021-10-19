@@ -1,4 +1,4 @@
-== OLD CODE
+## OLD CODE
 
 This code is deprecated and only kept around for historical reasons.
 
